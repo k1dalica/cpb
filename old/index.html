@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>CpB Photography - Sreten Vuletić</title>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+	<link rel="icon" type="image/png" href="images/favicon.png" />
+
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="lib/animate.css">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+
+	<meta name="author" content="Infinity Studio" />
+	<meta name="copyright" content="" />
+	<meta name="application-name" content="" />
+
+	<meta property="fb:app_id" content="" />
+	<meta property="og:title" content="" />
+	<meta property="og:type" content="website" />
+	<meta property="og:image" content="" />
+	<meta property="og:url" content="" />
+	<meta property="og:description" content="" />
+
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:description" content="" />
+	<meta name="twitter:image" content="" />
+</head>
+<body>
+	<div id="loading"><img src="images/logobig.png"></div>
+
+	<div id="gallery-slider">
+		<div class="top-wrapper">
+			<aside>
+				<div class="info">
+					<h2>Album name</h2>
+					<div>
+						<span>Naziv albuma: <b>Test</b></span>
+						<span>Naziv albuma: <b>Test</b></span>
+						<span>Naziv albuma: <b>Test</b></span>
+						<span>Naziv albuma: <b>Test</b></span>
+					</div>
+				</div>
+			</aside>
+			<section>
+				<div class="icon" id="fullscreen"></div>
+				<div class="icon" id="prev" onClick="prevImage()"></div>
+				<div class="icon" id="next" onClick="nextImage()"></div>
+				<div class="icon" id="close"></div>
+				<div class="image-wrapper">
+					<img id="slider-image" src="images/1.jpg" alt="">
+				</div>
+			</section>
+		</div><div class="slider">
+			<div><img src="images/1.jpg" alt="" class="active"><img src="images/2.jpg" alt=""><img src="images/1.jpg" alt=""><img src="images/2.jpg" alt=""><img src="images/1.jpg" alt=""></div>
+		</div>
+	</div>
+
+	<header>
+		<nav>
+			<div id="logo"><a href="#"><h1><img src="images/cpb-photography-logo.png" alt="CpB Photography logo"></h1></a>
+			</div><ul id="menu">
+				<li><a href="#">Home</a></li>
+				<li><a href="#">About</a></li>
+				<li><a href="#">Contact</a></li>
+				<li><a href="#">Workshop</a></li>
+			</ul><div class="social">
+				<a href="https://www.facebook.com/SretenjeodVuletica/" target="_blank"><i class="facebook">
+				</i></a><a href="https://www.instagram.com/stretfordius/" target="_blank"><i class="instagram">
+				</i></a><a href="https://www.flickr.com/photos/cr_v" target="_blank"><i class="flickr"></i></a>
+			</div>
+		</nav>
+	</header>
+	
+	<div class="gallery-wrapper">
+		<section>
+			<div class="header"><h2>STUDIO PHOTOGRAPHY</h2></div>
+			<div class="images-wrapper" scroll>
+				<div class="image wow fadeInUpBig" onClick="viewAlbum('5')"><img src="images/1.jpg" alt="">
+					<span>text: <b>nešto</b></span>
+				</div><div class="image wow fadeInUpBig"><img src="images/1.jpg" alt="">
+					<span>text: <b>nešto</b></span>
+				</div><div class="image wow fadeInUpBig"><img src="images/1.jpg" alt="">
+					<span>text: <b>nešto</b></span>
+				</div><div class="image wow fadeInUpBig"><img src="images/1.jpg" alt="">
+					<span>text: <b>nešto</b></span>
+				</div><div class="image wow fadeInUpBig"><img src="images/1.jpg" alt="">
+					<span>text: <b>nešto</b></span>
+				</div>
+			</div>
+		</section><section>
+			<div class="header"><h2>Still life photography</h2></div>
+			<div class="images-wrapper" scroll>
+				<div class="image wow fadeInUpBig"><img src="images/1.jpg" alt="">
+					<span>text: <b>nešto</b></span>
+				</div>
+			</div>
+		</section><section>
+			<div class="header"><h2>B&W photography</h2></div>
+			<div class="images-wrapper" scroll>
+				<div class="image wow fadeInUpBig"><img src="images/1.jpg" alt="">
+					<span>text: <b>nešto</b></span>
+				</div>
+			</div>
+		</section><section>
+			<div class="header"><h2>Headshots</h2></div>
+			<div class="images-wrapper" scroll>
+				<div class="image wow fadeInUpBig"><img src="images/1.jpg" alt="">
+					<span>text: <b>nešto</b></span>
+				</div>
+			</div>
+		</section><section>
+			<div class="header"><h2>Wedding photography</h2></div>
+			<div class="images-wrapper" scroll>
+				<div class="image wow fadeInUpBig"><img src="images/1.jpg" alt="">
+					<span>text: <b>nešto</b></span>
+				</div>
+			</div>
+		</section><section>
+			<div class="header"><h2>Travel and other</h2></div>
+			<div class="images-wrapper" scroll>
+				<div class="image wow fadeInUpBig"><img src="images/1.jpg" alt="">
+					<span>text: <b>nešto</b></span>
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<script src="lib/jquery-2.1.3.min.js"></script>
+	<script src="lib/wow.min.js"></script>
+	<script src="lib/main.js"></script>
+	<script src="lib/scroll.js"></script>
+</body>
+</html>
