@@ -1,0 +1,20 @@
+<template>
+  <section>
+    <h1>Contact</h1>
+    <p>Email: sretenvuletic@hotmail.com
+    <br>Tel: +381 64 353 8590
+    </p>
+  </section>
+</template>
+
+<script>
+export default {
+  name: 'Contact'
+}
+</script>
+
+<style scoped>
+  section { text-align: center; padding: 100px 15px;  }
+  section h1 { margin-bottom: 20px; }
+  section p { display: block; width: 100%; max-width: 800px; margin: 0 auto; }
+</style>
