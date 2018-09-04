@@ -2,7 +2,9 @@
   <header>
     <nav>
       <div class="logo">
-        <img src="./../assets/images/cpb-photography-logo.png" alt="CpB Photography Logo">
+        <router-link :to="{ name: 'Home' }">
+          <img src="@/assets/images/cpb-photography-logo.png" alt="CpB Photography Logo">
+        </router-link>
       </div>
 
       <ul id="menu">
@@ -38,7 +40,7 @@ export default {
   header nav .social-networks { display: inline-block; float: right; margin: 19px 0; }
   header nav .social-networks .icon { display: inline-block; vertical-align: top; width: 32px; height: 32px; margin-left: 5px; background-position: left; background-repeat: no-repeat; }
   header nav .social-networks .icon:hover {background-position: right; }
-  header nav .social-networks .icon.fb {background-image: url(./../assets/images/fb.png); }
-  header nav .social-networks .icon.insta {background-image: url(./../assets/images/insta.png); }
-  header nav .social-networks .icon.flickr {background-image: url(./../assets/images/fl.png); }
+  header nav .social-networks .icon.fb {background-image: url(./../../assets/images/fb.png); }
+  header nav .social-networks .icon.insta {background-image: url(./../../assets/images/insta.png); }
+  header nav .social-networks .icon.flickr {background-image: url(./../../assets/images/fl.png); }
 </style>

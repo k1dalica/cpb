@@ -15,6 +15,6 @@ export default {
 
 <style scoped>
   section { text-align: center; padding: 100px 15px;  }
-  section h1 { margin-bottom: 20px; }
-  section p { display: block; width: 100%; max-width: 800px; margin: 0 auto; }
+  section h1 { margin-bottom: 20px; font-size: 22px; }
+  section p { display: block; width: 100%; max-width: 800px; margin: 0 auto; line-height: 1.5; }
 </style>

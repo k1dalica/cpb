@@ -1,0 +1,7 @@
+export const SET_TOURNAMENTS = 'tournaments/SET_TOURNAMENTS'
+export const SET_ACTIVE_TOURNAMENT = 'tournaments/SET_ACTIVE_TOURNAMENT'
+export const SET_DISCIPLINES = 'tournaments/SET_DISCIPLINES'
+export const SET_CATEGORIES = 'tournaments/SET_CATEGORIES'
+export const SET_FEDERATIONS = 'tournaments/SET_FEDERATIONS'
+export const SET_MY_COMPETITORS = 'tournaments/SET_MY_COMPETITORS'
+export const SET_MY_TEAMS = 'tournaments/SET_MY_TEAMS'
