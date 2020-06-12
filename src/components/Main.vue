@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main">
     <MenuNav />
 
     <router-view/>
@@ -15,3 +15,7 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .main { height: 100%; }
+</style>

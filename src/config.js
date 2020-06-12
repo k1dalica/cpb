@@ -1,6 +1,6 @@
 const config = {
-  api: '/api/',
-  // api: 'http://dev.local/api/',
+  api: (process.env.NODE_ENV === 'development') ? 'http://dev.local/api/' : '/api/',
+  url: (process.env.NODE_ENV === 'development') ? 'http://dev.local/api' : '/api',
   date: {
     server: 'YYYY-MM-DD',
     displayDate: 'DD.MM.YYYY',

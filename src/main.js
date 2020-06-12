@@ -4,11 +4,13 @@ import router from './router'
 import bus from '@/services/bus'
 import Vuex from 'vuex'
 import store from './store'
-import Buefy from 'buefy'
-import 'buefy/lib/buefy.css'
-import { getFormattedDate } from '@/services/dateFormat'
 import config from '@/config'
+import Vuelidate from 'vuelidate'
+import Buefy from 'buefy'
+import { getFormattedDate } from '@/services/dateFormat'
+import 'buefy/dist/buefy.css'
 
+Vue.use(Vuelidate)
 Vue.use(bus)
 Vue.use(Vuex)
 Vue.use(Buefy, {

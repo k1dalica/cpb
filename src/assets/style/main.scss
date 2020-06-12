@@ -8,6 +8,9 @@
   src: url(./assets/fonts/ChopinScript.otf);
 }
 
+@import "~bulma";
+@import "~buefy/src/scss/buefy";
+
 body, html {
   width: 100%;
   height: 100%;
@@ -18,6 +21,7 @@ body, html {
   font-weight: normal;
   background-color: #000;
   color: #fff;
+  overflow: auto;
 }
 
 #app {
@@ -50,3 +54,9 @@ a {
   transform: translateX(10px);
   opacity: 0;
 }
+
+.dialog.modal {
+  color: #000;
+}
+
+#app .textarea { resize: none; }

@@ -12,11 +12,14 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "buefy": "^0.6.6",
+    "buefy": "^0.6.7",
     "moment": "^2.22.2",
     "moment-js": "^1.1.15",
+    "style-loader": "^0.23.0",
     "vue": "^2.5.2",
+    "vue-perfect-scrollbar": "^0.1.0",
     "vue-router": "^3.0.1",
+    "vuelidate": "^0.7.4",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
