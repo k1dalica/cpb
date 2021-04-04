@@ -14,7 +14,7 @@ class Album {
     $category,
     $images;
 
-  
+
     public function __construct($album) {
       $this->id = $album->id;
       $this->name = $album->ime;
@@ -31,11 +31,14 @@ class Album {
     }
 
     public function updateImages($images) {
+      $count = 1;
       foreach($images as $image) {
-        if ($image->delete)
+        if ($image->delete) {
           DB::getInstance()->delete("slike", ["id", "=", $image->id]);
-        else
-          DB::getInstance()->update("slike", "id", $image->id, ["opis" => nl2br($image->desc)]);
+        } else {
+          $count++;
+          DB::getInstance()->update("slike", "id", $image->id, ["opis" => nl2br($image->desc), "pos" => $count]);
+        }
       }
     }
 
@@ -60,12 +63,12 @@ class Album {
       foreach($data['name'] as $key => $name) {
         $tmp = $data['tmp_name'][$key];
         $size = $data['size'][$key];
-        
+
         $image = [];
         $image["name"] = $name;
         $image["tmp_name"] = $tmp;
         $image["size"] = $size;
-        
+
         $images[] = Image::upload($image);
       }
       // $queries = [];
@@ -73,7 +76,8 @@ class Album {
         DB::getInstance()->insert("slike", [
           "aid" => $this->id,
           "path" => $image,
-          "opis" => ""
+          "opis" => "",
+          "pos" => 9999
         ]);
         // $queries[] = "('', $this->id, $image, '')";
       }

@@ -37,34 +37,49 @@
         </router-link>
       </div>
     </header>
+
     <section>
       <div v-if="images.length">
-        <div class="columns is-multiline">
-          <div
-            v-for="image in images"
-            :key="image.id"
-            class="column is-3">
-            <div class="card">
-              <div class="card-image">
-                <div class="buttons">
-                  <button
-                    class="button is-small"
-                    :class="{ 'is-danger': image.delete }"
-                    @click="image.delete = !image.delete; $forceUpdate()">
-                    {{ image.delete ? 'Deleted - Undo' : 'Delete' }}
-                  </button>
+        <div>
+          <draggable
+            v-model="images"
+            handle=".handle">
+            <transition-group class="columns is-multiline">
+              <div
+                v-for="image in images"
+                :key="image.id"
+                class="column is-3">
+                <div class="card">
+                  <div class="card-image">
+                    <div class="buttons">
+                      <button
+                        class="button is-small"
+                        :class="{ 'is-danger': image.delete }"
+                        @click="image.delete = !image.delete; $forceUpdate()">
+                        {{ image.delete ? 'Deleted - Undo' : 'Delete' }}
+                      </button>
+                      <button
+                        class="button is-small">
+                        <b-icon
+                          pack="fas"
+                          class="handle"
+                          icon=" fa-arrows-alt"
+                          size="is-small" />
+                      </button>
+                    </div>
+                    <figure class="image is-4by3">
+                      <img :src="url + image.path">
+                    </figure>
+                  </div>
+                  <div class="card-content">
+                    <b-input type="textarea" v-model="image.desc" />
+                  </div>
                 </div>
-                <figure class="image is-4by3">
-                  <img :src="url + image.path">
-                </figure>
               </div>
-              <div class="card-content">
-                <b-input type="textarea" v-model="image.desc" />
-              </div>
-            </div>
-          </div>
+            </transition-group>
+          </draggable>
         </div>
-        <div class="centered">
+        <div class="mt-20">
           <button
             class="button is-large is-info centered"
             :disabled="saving"
@@ -90,17 +105,20 @@
 import config from '@/config'
 import { mapGetters, mapActions } from 'vuex'
 
+import draggable from 'vuedraggable'
+
 export default {
+  components: {
+    draggable
+  },
+
   data: () => ({
+    images: [],
     url: config.url,
     files: [],
     uploading: false,
     saving: false
   }),
-
-  created () {
-    this.getAlbum(this.$route.params.id)
-  },
 
   watch: {
     files (images) {
@@ -111,44 +129,44 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['album']),
+    ...mapGetters(['album'])
+  },
 
-    images () {
-      return this.album ? this.album.images.map(item => {
-        return {
-          ...item,
-          delete: false
-        }
-      }) : []
-    }
+  async created () {
+    await this.getAlbum(this.$route.params.id)
+    this.setImages()
   },
 
   methods: {
     ...mapActions(['getAlbum', 'uploadImages', 'saveImages']),
+
+    setImages () {
+      this.images = this.album ? this.album.images.map(item => ({
+        ...item,
+        delete: false
+      })) : []
+    },
 
     upload (images) {
       this.uploading = true
       let data = new FormData()
       images.forEach(item => data.append('images[]', item, item.name))
       this.uploadImages({ id: this.album.id, data })
-        .then(res => {
-          this.uploading = false
-        })
+        .then(res => this.setImages())
     },
 
     save () {
       this.saving = true
-      this.saveImages({ id: this.album.id, data: this.images })
-        .then(() => {
-          this.saving = false
-        })
+      this.saveImages({ id: this.album.id, data: this.images }).then(() => {
+        this.saving = false
+      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .centered { margin: 0 auto; text-align: center; }
+  .centered { display: block; margin: 0 auto; text-align: center; }
   .clearfix::after { content: ""; clear: both; display: table; }
 
   .card .card-content { padding: 5px; }
