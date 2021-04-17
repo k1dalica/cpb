@@ -1,6 +1,6 @@
 import * as types from './types.js'
 
-import { getAlbums, createAlbum, updateAlbum, getAlbum, deleteAlbum, uploadImages, saveImages } from '@/services/api/albums'
+import { getAlbums, createAlbum, updateAlbum, getAlbum, deleteAlbum, uploadImages, saveImages, reorderAlbums } from '@/services/api/albums'
 
 const state = {
   albums: [],
@@ -34,6 +34,13 @@ const actions = {
         commit(types.SET_ALBUMS, res.data)
         return res.data
       })
+  },
+
+  reorderAlbums ({ commit }, data) {
+    return reorderAlbums(data).then(res => {
+      commit(types.SET_ALBUMS, res.data)
+      return res.data
+    })
   },
 
   getAlbum ({ commit }, id) {

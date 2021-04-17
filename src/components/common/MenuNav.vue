@@ -44,4 +44,21 @@ export default {
   header nav .social-networks .icon.fb {background-image: url(./../../assets/images/fb.png); }
   header nav .social-networks .icon.insta {background-image: url(./../../assets/images/insta.png); }
   header nav .social-networks .icon.flickr {background-image: url(./../../assets/images/fl.png); }
+
+  @media all and (max-width: 1024px) {
+    header nav { padding: 0 20px; height: 100%; }
+    header nav .logo { display: none; }
+    header nav #menu { width: auto; }
+    header nav #menu li { margin: 0 20px 0 0; }
+  }
+  @media all and (max-width: 500px) {
+    header nav #menu { font-size: 24px; }
+    header nav #menu li { margin: 0 15px 0 0; }
+  }
+  @media all and (max-width: 450px) {
+    header nav #menu { line-height: 40px; width: 100%; }
+    header nav #menu li { margin: 0 10px; }
+    header nav .social-networks { width: 100%; margin: 0; text-align: center; }
+    header nav .social-networks .icon { width: 22px; height: 22px; background-size: cover; }
+  }
 </style>

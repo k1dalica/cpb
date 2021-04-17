@@ -15,6 +15,16 @@ class AlbumsController extends Controller {
 		return $this->json(["data" => Album::all()]);
 	}
 
+	public function reorderAlbums () {
+    $albums = Input::get('albums');
+    foreach ($albums as $index => $id) {
+      $album = Album::find($id);
+      $album->pos = $index;
+      $album->update();
+    }
+		return $this->json(["data" => Album::all()]);
+	}
+
 	public function getAlbum ($id) {
 		return $this->json(["data" => Album::find($id)]);
 	}
@@ -28,9 +38,8 @@ class AlbumsController extends Controller {
 	}
 
 	public function editAlbum ($id) {
-		// return $this->json(["data" => Input::get("cover")]);
 		$album = Album::find($id);
-		
+
 		$album->name = Input::get("name") ? Input::get("name") : $album->name;
     $album->cover = Input::get("cover") != "null" && Input::get("cover") != "undefined" ? Image::upload(Input::get("cover")) : $album->cover;
 		$album->desc = Input::get("desc") ? nl2br(Input::get("desc")) : $album->desc;

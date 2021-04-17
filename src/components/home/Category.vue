@@ -1,10 +1,13 @@
 <template>
   <section class="category">
-    <div class="header"><h1>{{ title }}</h1></div>
+    <div class="header">
+      <router-link :to="{ name: 'CategoryView', params: { id: category.id } }">
+        <h1>{{ category.name }}</h1>
+      </router-link>
+    </div>
     <VuePerfectScrollbar
       v-if="data"
-      class="scroll-area"
-      :settings="settings">
+      class="scroll-area">
       <div class="container">
         <div class="album" v-for="album in data" :key="album.id" @click="openAlbum(album)">
           <img :src="url + album.cover" class="img">
@@ -30,14 +33,25 @@ import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
 export default {
   name: 'Category',
+
   components: {
     VuePerfectScrollbar
   },
-  props: ['title', 'data'],
-  data: () => ({
-    url: config.api,
-    settings: {
+
+  props: {
+    category: {
+      type: Object,
+      required: true
+    },
+
+    data: {
+      type: Array,
+      required: true
     }
+  },
+
+  data: () => ({
+    url: config.api
   }),
 
   created () {
@@ -53,13 +67,27 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .container { width: 100%; }
 
   .category { display: block; height: 100%; position: relative; }
 
   .header { height: 40px; line-height: 40px; text-align: center; background-color: #000; position: relative; top: 0; left: 0; width: 100%; }
-  .header h1 { margin: 0; font-weight: normal; font-size: 13px; text-transform: uppercase; color: #fff; }
+  .header h1 {
+    margin: 0;
+    padding: 0 5px;
+    font-weight: normal;
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &:hover {
+      color: #0fabd0;
+      cursor: pointer;
+    }
+  }
 
   .album { width: 100%; position: relative; overflow: hidden; }
   .album:hover { cursor: pointer; }

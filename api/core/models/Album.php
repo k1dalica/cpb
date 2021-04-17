@@ -12,7 +12,8 @@ class Album {
     $equipment,
     $editorial,
     $category,
-    $images;
+    $images,
+    $pos;
 
 
     public function __construct($album) {
@@ -27,6 +28,7 @@ class Album {
       $this->equipment = $album->oprema;
       $this->editorial = $album->editorijal;
       $this->category = $album->kat;
+      $this->pos = $album->pos;
       $this->images = Slika::fromAlbum($album->id);
     }
 
@@ -53,7 +55,8 @@ class Album {
         "makeup" => $this->makeup,
         "oprema" => $this->equipment,
         "editorijal" => $this->editorial,
-        "kat" => $this->category
+        "kat" => $this->category,
+        "pos" => $this->pos
       ]);
       return $this;
     }
@@ -71,7 +74,6 @@ class Album {
 
         $images[] = Image::upload($image);
       }
-      // $queries = [];
       foreach($images as $image) {
         DB::getInstance()->insert("slike", [
           "aid" => $this->id,
@@ -79,15 +81,12 @@ class Album {
           "opis" => "",
           "pos" => 9999
         ]);
-        // $queries[] = "('', $this->id, $image, '')";
       }
-      // $sql = "INSERT INTO `slike` ('id', 'aid', 'path', 'opis') VALUES " . implode(", ", $queries);
-      // $query = DB::getInstance()->query($sql);
       return true;
     }
 
     public static function create($data) {
-      $query = DB::getInstance()->insert("albumi", [
+      DB::getInstance()->insert("albumi", [
         "ime" => $data["name"],
         "cover" => Image::upload($data["cover"]),
         "opis" => isset($data["desc"]) ? nl2br($data["desc"]) : "",
@@ -106,8 +105,8 @@ class Album {
     }
 
     public function delete() {
-      $query = DB::getInstance()->delete("albumi",["id", "=", $this->id]);
-      $query = DB::getInstance()->delete("slike",["aid", "=", $this->id]);
+      DB::getInstance()->delete("albumi",["id", "=", $this->id]);
+      DB::getInstance()->delete("slike",["aid", "=", $this->id]);
       Image::delete($this->cover);
       foreach($this->images as $image) {
         Image::delete($image);
@@ -116,7 +115,7 @@ class Album {
     }
 
     public static function all() {
-      $query = DB::getInstance()->query("SELECT * FROM `albumi` ORDER BY `kat` ASC");
+      $query = DB::getInstance()->query("SELECT * FROM `albumi` ORDER BY `pos` ASC");
       $data = [];
       if ($query->count() > 0) {
         foreach($query->results() as $result)

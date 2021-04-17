@@ -1,45 +1,189 @@
 <template>
   <div>
     <template v-if="albums && albums.length > 0">
-    <article v-for="album in albums" :key="album.id" class="album">
-      <router-link :to="{ name: 'vievAlbum', params: { id: album.id } }">
-        <div class="size">
-          <img :src="url + album.cover" class="img">
-          <div class="overflow">
-            <h3>{{ album.name }}</h3>
-            <span>{{ categories[album.category - 1] }}</span>
+      <draggable
+        v-if="admin"
+        v-model="reordelableAlbums"
+        handle=".handle"
+        class="draggable"
+        @change="saveReorder()">
+        <transition-group class="albums">
+          <div
+            v-for="album in reordelableAlbums"
+            :key="album.id"
+            class="wrapper">
+            <router-link :to="{ name: 'ViewAlbum', params: { id: album.id } }">
+              <article
+                class="album"
+                :style="{ 'background-image': `url(${url + album.cover})` }">
+                <button class="button handle is-small">
+                  <b-icon
+                    pack="fas"
+                    icon=" fa-arrows-alt"
+                    size="is-small" />
+                </button>
+                <div class="overflow">
+                  <h3>{{ album.name }}</h3>
+                </div>
+              </article>
+            </router-link>
           </div>
+        </transition-group>
+      </draggable>
+
+      <div v-else class="albums padding">
+        <div
+          v-for="album in reordelableAlbums"
+          :key="album.id"
+          class="wrapper">
+          <article
+            class="album"
+            :style="{ 'background-image': `url(${url + album.cover})` }"
+            @click="previewAlbum = album">
+            <div class="overflow">
+              <h3>{{ album.name }}</h3>
+            </div>
+          </article>
         </div>
-      </router-link>
-    </article>
+      </div>
     </template>
+
     <template v-else>
       <b-notification :closable="false">
         There is no albums in this category yet.
       </b-notification>
     </template>
+    <transition name="fade">
+      <Preview
+        v-if="previewAlbum"
+        :album="previewAlbum"
+        @close="previewAlbum = null" />
+    </transition>
   </div>
 </template>
 
 <script>
 import config from '@/config'
+import { mapActions } from 'vuex'
+import draggable from 'vuedraggable'
+
+import Preview from '../home/Preview'
 
 export default {
-  props: ['albums', 'categories'],
+  props: {
+    albums: {
+      type: Array,
+      required: true
+    },
+
+    admin: {
+      type: Boolean,
+      default: false
+    }
+  },
+
+  components: {
+    Preview,
+    draggable
+  },
 
   data: () => ({
-    url: config.api
-  })
+    reordelableAlbums: [],
+    url: config.api,
+    previewAlbum: null
+  }),
+
+  watch: {
+    albums: {
+      handler (albums) {
+        this.reordelableAlbums = albums ? [...albums] : []
+      },
+      immediate: true
+    }
+  },
+
+  methods: {
+    ...mapActions(['reorderAlbums']),
+
+    saveReorder () {
+      this.reorderAlbums(this.reordelableAlbums.map(album => album.id))
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-  article.album { width: 300px; height: 250px; background-color: #fff; display: inline-block; margin: 15px; border-radius: 3px; overflow: hidden; }
-  article.album .size { width: 100%; position: relative; }
-  article.album .size img { width: 300px; height: 250px; object-fit: cover; }
-  article.album .size .overflow { position: absolute; bottom: 0; left: 0; width: 100%; background-color: rgba(0,0,0,0.5); color: #fff; padding: 10px; transition: all ease-out .15s; }
-  article.album .size .overflow h3 { font-size: 15px; font-weight: bold; line-height: 1.3; }
-  article.album .size .overflow span { font-size: 12px; font-weight: 200; color: #ddd; }
-  article.album .size:hover .overflow { cursor: pointer; width: 100%; height: 100%; transition: all ease-out .15s; display: flex; flex-direction: column; justify-content: center; align-items: center; line-height: 1.5; background-color: rgba(0,0,0,0.7) }
+  .draggable {
+    width: 100%;
+  }
 
+  .albums {
+    display: flex;
+    flex-wrap: wrap;
+    &.padding {
+      padding: 10px;
+    }
+    .wrapper {
+      width: calc(100% / 4);
+      padding: 20px;
+    }
+  }
+
+  .album {
+    width: 100%;
+    padding-bottom: 67%;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    border-radius: 5px;
+    overflow: hidden;
+    .overflow {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%;
+      background-color: rgba(0,0,0,0.5);
+      color: #fff;
+      padding: 10px;
+      transition: all ease-out .15s;
+      cursor: pointer;
+    }
+    .handle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 5;
+    }
+    &:hover {
+      cursor: pointer;
+      .overflow {
+        background-color: rgba(0,0,0,0.9);
+        padding: 15px;
+        font-size: 17px;
+      }
+    }
+  }
+
+  @media all and (max-width: 1600px) {
+    .albums {
+      .wrapper {
+        width: calc(100% / 3);
+      }
+    }
+  }
+
+  @media all and (max-width: 1100px) {
+    .albums {
+      .wrapper {
+        width: 50%;
+      }
+    }
+  }
+
+  @media all and (max-width: 650px) {
+    .albums {
+      .wrapper {
+        width: 100%;
+      }
+    }
+  }
 </style>

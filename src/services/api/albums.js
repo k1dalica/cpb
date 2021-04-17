@@ -7,6 +7,12 @@ export function getAlbums () {
     .catch(error => errorHandler(error))
 }
 
+export function reorderAlbums (data) {
+  return axios.put(`albums`, { albums: data })
+    .then(responseTransformer)
+    .catch(error => errorHandler(error))
+}
+
 export function createAlbum (data) {
   return axios.post(`album`, data)
     .then(responseTransformer)

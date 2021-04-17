@@ -1,42 +1,31 @@
 <template>
- <main v-if="album">
-    <header class="clearfix">
-      <h1>
-        <router-link :to="{ name: 'AdminHome' }">
-          <button class="button is-default">
-            <span class="icon">
-              <i class="fas fa-arrow-left" />
-            </span>
-            <span>Back</span>
-          </button>
-        </router-link>
-        {{ album.name }}</h1>
-      <div class="buttons button-group">
-        <b-field class="file">
-          <b-upload
-            v-model="files"
-            :multiple="true"
-            :disabled="uploading"
-            :class="{ 'is-loading': uploading }"
-            accept="image/*">
-              <a class="button is-info">
-                <span class="icon">
-                  <i class="fa fa-plus" />
-                </span>
-                <span>Add images to album</span>
-              </a>
-          </b-upload>
-        </b-field>
-        <router-link :to="{ name: 'editAlbum', params: { id: album.id } }">
-          <button class="button is-success">
-            <span class="icon">
-              <i class="fas fa-edit" />
-            </span>
-            <span>Edit album</span>
-          </button>
-        </router-link>
-      </div>
-    </header>
+  <main>
+    <navigation
+      :title="album.name"
+      :back="{ name: 'AdminHome', params: { id: album.category } }">
+      <b-field class="file">
+        <b-upload
+          v-model="files"
+          :multiple="true"
+          :disabled="uploading"
+          :class="{ 'is-loading': uploading }"
+          accept="image/*">
+            <a class="button is-info">
+              <span class="icon">
+                <i class="fa fa-plus" />
+              </span>
+              <span>Add images to album</span>
+            </a>
+        </b-upload>
+      </b-field>
+
+      <router-link :to="{ name: 'EditAlbum', params: { id: album.id } }">
+        <button class="button is-primary">
+          <span class="icon"><i class="fas fa-edit" /></span>
+          <span>Edit album</span>
+        </button>
+      </router-link>
+   </navigation>
 
     <section>
       <div v-if="images.length">
@@ -44,11 +33,11 @@
           <draggable
             v-model="images"
             handle=".handle">
-            <transition-group class="columns is-multiline">
+            <transition-group class="columns is-mobile is-multiline">
               <div
                 v-for="image in images"
                 :key="image.id"
-                class="column is-3">
+                class="column is-full-mobile is-half-tablet is-half-desktop is-one-third-widescreen is-one-quarter-fullhd">
                 <div class="card">
                   <div class="card-image">
                     <div class="buttons">
@@ -58,11 +47,9 @@
                         @click="image.delete = !image.delete; $forceUpdate()">
                         {{ image.delete ? 'Deleted - Undo' : 'Delete' }}
                       </button>
-                      <button
-                        class="button is-small">
+                      <button class="button handle is-small">
                         <b-icon
                           pack="fas"
-                          class="handle"
                           icon=" fa-arrows-alt"
                           size="is-small" />
                       </button>
@@ -79,16 +66,19 @@
             </transition-group>
           </draggable>
         </div>
+
         <div class="mt-20">
           <button
-            class="button is-large is-info centered"
+            class="button is-info centered"
             :disabled="saving"
             :class="{ 'is-loading': saving }"
             @click="save">
             <span>Save changes</span>
           </button>
         </div>
-      </div><div v-else>
+      </div>
+
+      <div v-else>
         <div class="columns">
           <div class="column">
             <b-notification :closable="false">
@@ -102,14 +92,22 @@
 </template>
 
 <script>
+import store from '@/store'
 import config from '@/config'
 import { mapGetters, mapActions } from 'vuex'
 
 import draggable from 'vuedraggable'
+import Navigation from './common/Navigation'
 
 export default {
+  async beforeRouteEnter (to, from, next) {
+    await store.dispatch('getAlbum', to.params.id)
+    next()
+  },
+
   components: {
-    draggable
+    draggable,
+    Navigation
   },
 
   data: () => ({
@@ -120,7 +118,15 @@ export default {
     saving: false
   }),
 
+  computed: {
+    ...mapGetters(['album'])
+  },
+
   watch: {
+    album () {
+      this.setImages()
+    },
+
     files (images) {
       if (images.length > 0) {
         this.upload(images)
@@ -128,17 +134,12 @@ export default {
     }
   },
 
-  computed: {
-    ...mapGetters(['album'])
-  },
-
   async created () {
-    await this.getAlbum(this.$route.params.id)
     this.setImages()
   },
 
   methods: {
-    ...mapActions(['getAlbum', 'uploadImages', 'saveImages']),
+    ...mapActions(['uploadImages', 'saveImages']),
 
     setImages () {
       this.images = this.album ? this.album.images.map(item => ({
@@ -147,12 +148,13 @@ export default {
       })) : []
     },
 
-    upload (images) {
+    async upload (images) {
       this.uploading = true
       let data = new FormData()
       images.forEach(item => data.append('images[]', item, item.name))
-      this.uploadImages({ id: this.album.id, data })
-        .then(res => this.setImages())
+      await this.uploadImages({ id: this.album.id, data })
+      this.setImages()
+      this.uploading = false
     },
 
     save () {
@@ -171,7 +173,7 @@ export default {
 
   .card .card-content { padding: 5px; }
 
-  main { color: #000; padding: 25px 50px; width: 100%; }
+  // main { color: #000; padding: 25px 50px; width: 100%; }
   main header { font-size: 40px; width: 100%; margin-bottom: 30px; }
   main header h1 { font-size: 40px; float: left; }
   main header .buttons { float: right; }
@@ -182,7 +184,6 @@ export default {
 
   .card-image { position: relative; }
   .card-image .buttons { width: auto; height: auto; position: absolute; top: 5px; right: 5px; z-index: 5; }
-  .card-image:hover .buttons { display: block; }
 </style>
 
 <style lang="scss">

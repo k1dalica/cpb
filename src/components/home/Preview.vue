@@ -12,7 +12,7 @@
         </aside>
       </transition>
       <section>
-        <div class="icon" id="smallscreen" :class="{ 'right': !smallscreen}" @click="smallscreen = !smallscreen"></div>
+        <div class="icon" id="smallscreen" :class="{ 'right': !smallscreen}" @click="changeFullscreen()"></div>
         <div class="icon" v-if="images.length > 1" id="prev" @click="prev"></div>
         <div class="icon" v-if="images.length > 1" id="next" @click="next"></div>
         <div class="icon" id="close" @click="$emit('close')"></div>
@@ -48,6 +48,7 @@ export default {
 
   created () {
     document.onkeydown = this.addListeners
+    this.smallscreen = localStorage.getItem('fullscreen') !== 'false'
   },
 
   computed: {
@@ -61,22 +62,16 @@ export default {
   },
 
   methods: {
+    changeFullscreen () {
+      this.smallscreen = !this.smallscreen
+      localStorage.setItem('fullscreen', this.smallscreen)
+    },
+
     addListeners (e) {
-      if (e.keyCode === 37) {
-        this.prev()
-      }
-
-      if (e.keyCode === 39) {
-        this.next()
-      }
-
-      if (e.keyCode === 0 || e.keyCode === 32) {
-        this.smallscreen = !this.smallscreen
-      }
-
-      if (e.keyCode === 27) {
-        this.$emit('close')
-      }
+      if (e.keyCode === 37) this.prev()
+      if (e.keyCode === 39) this.next()
+      if (e.keyCode === 0 || e.keyCode === 32) this.smallscreen = !this.smallscreen
+      if (e.keyCode === 27) this.$emit('close')
     },
 
     preview (index) {
@@ -91,6 +86,7 @@ export default {
       this.selected = (this.selected === 0) ? this.images.length - 1 : this.selected - 1
     }
   },
+
   beforeDestroy () {
     document.removeEventListener('onkeydown', this.addListeners, false)
   }

@@ -22,6 +22,7 @@ class RouteHandler {
 	public function addRoutes() {
 		$this->post('md5', 'OtherController@password');
 		$this->get('albums', 'AlbumsController@getAlbums');
+		$this->put('albums', 'AlbumsController@reorderAlbums');
 		$this->get('album/{id}', 'AlbumsController@getAlbum');
 		$this->post('album', 'AlbumsController@createAlbum');
 		$this->post('album/{id}/edit', 'AlbumsController@editAlbum');
@@ -48,14 +49,14 @@ class RouteHandler {
 			  header("Content-Type: text/plain");
 			  echo "You cannot repeat this request";
 			}
-		  
+
 		}
-		header('Access-Control-Allow-Origin: *'); 
+		header('Access-Control-Allow-Origin: *');
 		header("Access-Control-Allow-Credentials: true");
 		header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 		header('Access-Control-Max-Age: 1000');
 		header('Access-Control-Allow-Headers: Access-Control-Allow-Origin, Access-Control-Allow-Headers, Origin, X-Requested-With, Content-Type, X-Auth-Token, Authorization');
-		
+
 		header('Content-Type: application/json');
 	}
 
@@ -101,7 +102,7 @@ class RouteHandler {
 		$exp = explode("@", $controller);
 		$controllerName = $exp[0];
 		$method = $exp[1];
-		
+
 		try {
 			require 'core/controllers/' . $controllerName . '.php';
 			$controller = new $controllerName;

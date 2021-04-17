@@ -5,7 +5,7 @@ export const loggedIn = () => {
 
 export function login (pass) {
   // if (pass === 'c8837b23ff8aaa8a2dde915473ce0991') {
-  if (pass === '8dd8398e3d3528f48e834972e4c78f0a') {
+  if (pass === '9b9ef3de7e4f5fd0392b6b2b0ea14030') {
     localStorage.setItem('token', pass)
     return true
   }

@@ -1,5 +1,6 @@
 import Main from '@/components/Main'
 import Home from '@/components/home/Home'
+import CategoryView from '@/components/home/CategoryView'
 import About from '@/components/about/About'
 import Dashboard from '@/components/AP/Dashboard'
 import Contact from '@/components/contact/Contact'
@@ -28,6 +29,11 @@ export const routes = [
         path: '/home',
         name: 'Home',
         component: Home
+      },
+      {
+        path: '/category/:id',
+        name: 'CategoryView',
+        component: CategoryView
       }
     ]
   },
@@ -35,25 +41,26 @@ export const routes = [
     path: '/admin',
     component: Dashboard,
     meta: { auth: true },
+    redirect: { name: 'AdminHome', params: { id: 1 } },
     children: [
       {
-        path: '/',
-        name: 'AdminHome',
-        component: AdminHome
-      },
-      {
-        path: 'create',
+        path: ':id/create',
         name: 'createAlbum',
         component: ManageAlbum
       },
       {
+        path: ':id',
+        name: 'AdminHome',
+        component: AdminHome
+      },
+      {
         path: 'album/:id',
-        name: 'vievAlbum',
+        name: 'ViewAlbum',
         component: ViewAlbum
       },
       {
-        path: 'edit/:id',
-        name: 'editAlbum',
+        path: ':id/edit',
+        name: 'EditAlbum',
         component: ManageAlbum
       }
     ]

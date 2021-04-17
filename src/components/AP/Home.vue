@@ -1,67 +1,63 @@
 <template>
   <main>
-    <header class="clearfix">
-      <h1>Albums</h1>
-      <div class="buttons">
-        <router-link :to="{ name: 'createAlbum' }">
-          <button class="button is-info is-medium">
-            <span class="icon">
-              <i class="fa fa-plus" />
-            </span>
-            <span>Create album</span>
-          </button>
-        </router-link>
-      </div>
-    </header>
+    <navigation title="Albums">
+      <router-link :to="{ name: 'createAlbum', params: { id: categoryId } }">
+        <button class="button is-info">
+          <span class="icon">
+            <i class="fa fa-plus" />
+          </span>
+          <span>Create album</span>
+        </button>
+      </router-link>
+    </navigation>
+
     <section>
-    <b-tabs v-model="activeTab">
-      <b-tab-item v-for="(cat, index) in categories" :key="cat" :label="cat">
-        <album :albums="albums[index + 1]" :categories="categories" />
-      </b-tab-item>
-    </b-tabs>
+      <category-view admin />
     </section>
   </main>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import store from '@/store'
+import { mapGetters } from 'vuex'
 
 import Album from './Album'
+import Navigation from './common/Navigation'
+import CategoryView from '../home/CategoryView'
 
 export default {
+  async beforeRouteEnter (to, from, next) {
+    await store.dispatch('getAlbums')
+    next()
+  },
+
   components: {
-    Album
+    Album,
+    Navigation,
+    CategoryView
   },
 
   data: () => ({
-    categories: [
-      'Studio Photography',
-      'STILL LIFE PHOTOGRAPHY',
-      'Art photography',
-      'HEADSHOTS',
-      'WEDDING PHOTOGRAPHY',
-      'TRAVEL AND OTHER'
-    ],
     activeTab: 0
   }),
 
-  created () {
-    this.getAlbums()
-  },
-
   computed: {
-    ...mapGetters(['albums'])
-  },
+    ...mapGetters(['albums']),
 
-  methods: {
-    ...mapActions(['getAlbums'])
+    categoryId () {
+      return this.$route.params.id
+    },
+
+    categories () {
+      return this.$store.getters['categoriesName']
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
   .clearfix::after { content: ""; clear: both; display: table; }
-  main { color: #000; padding: 25px 50px; width: 100%; }
+  // main { color: #000; padding: 25px 50px; width: 100%; }
   main header { font-size: 40px; width: 100%; margin-bottom: 30px; }
   main header h1 { font-size: 40px; float: left; }
   main header .buttons { float: right; }
